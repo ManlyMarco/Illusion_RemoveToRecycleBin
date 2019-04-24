@@ -26,19 +26,19 @@ namespace KK_RemoveToRecycleBin
         public static void FileStreamHook(string path, FileMode mode, FileAccess access)
         {
             if (mode == FileMode.Create && access.HasFlag(FileAccess.Write))
-                MaybeDelete(path);
+                MoveToRecycleBin(path);
         }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(File), nameof(File.Delete), new[] { typeof(string) })]
         public static void FileDeleteHook(string path)
         {
-            MaybeDelete(path);
+            MoveToRecycleBin(path);
         }
 
-        private static void MaybeDelete(string path)
+        private static void MoveToRecycleBin(string path)
         {
-            if (string.IsNullOrEmpty(path)) return;
+            if (!File.Exists(path)) return;
 
             var fullPath = Path.GetFullPath(path);
             if (fullPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) &&
