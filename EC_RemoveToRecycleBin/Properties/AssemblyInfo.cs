@@ -5,10 +5,10 @@ using KK_RemoveToRecycleBin;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KK_RemoveToRecycleBin")]
+[assembly: AssemblyTitle("EC_RemoveToRecycleBin")]
 [assembly: AssemblyDescription("Move removed/overwritten cards to recycle bin")]
 [assembly: AssemblyCompany("ManlyMarco")]
-[assembly: AssemblyProduct("KK_RemoveToRecycleBin")]
+[assembly: AssemblyProduct("EC_RemoveToRecycleBin")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -17,7 +17,7 @@ using KK_RemoveToRecycleBin;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("888a7a61-4808-4d2c-88f0-389691f9426a")]
+[assembly: Guid("b1616464-f0d5-429b-80dc-d1ed43d37c56")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,3 +31,4 @@ using KK_RemoveToRecycleBin;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion(RemoveToRecycleBin.Version)]
+
