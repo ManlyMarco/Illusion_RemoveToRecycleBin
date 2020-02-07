@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveToRecycleBin", "KK_RemoveToRecycleBin\RemoveToRecycleBin.csproj", "{888A7A61-4808-4D2C-88F0-389691F9426A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveToRecycleBin", "RemoveToRecycleBin\RemoveToRecycleBin.csproj", "{888A7A61-4808-4D2C-88F0-389691F9426A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
