@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2016
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_RemoveToRecycleBin", "KK_RemoveToRecycleBin\KK_RemoveToRecycleBin.csproj", "{888A7A61-4808-4D2C-88F0-389691F9426A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EC_RemoveToRecycleBin", "EC_RemoveToRecycleBin\EC_RemoveToRecycleBin.csproj", "{B1616464-F0D5-429B-80DC-D1ED43D37C56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoveToRecycleBin", "KK_RemoveToRecycleBin\RemoveToRecycleBin.csproj", "{888A7A61-4808-4D2C-88F0-389691F9426A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{888A7A61-4808-4D2C-88F0-389691F9426A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{888A7A61-4808-4D2C-88F0-389691F9426A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{888A7A61-4808-4D2C-88F0-389691F9426A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1616464-F0D5-429B-80DC-D1ED43D37C56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1616464-F0D5-429B-80DC-D1ED43D37C56}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1616464-F0D5-429B-80DC-D1ED43D37C56}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1616464-F0D5-429B-80DC-D1ED43D37C56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

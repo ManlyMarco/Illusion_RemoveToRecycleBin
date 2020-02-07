@@ -1,31 +1,50 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using BepInEx;
+using BepInEx.Harmony;
 using BepInEx.Logging;
-using Harmony;
+using HarmonyLib;
 using Illusion.Extensions;
 
 namespace KK_RemoveToRecycleBin
 {
-    [BepInPlugin(GUID, "Move removed/overwritten cards to recycle bin", Version)]
+    [BepInPlugin(GUID, "Remove Cards To Recycle Bin", Version)]
     public class RemoveToRecycleBin : BaseUnityPlugin
     {
         public const string GUID = "marco.RemoveToRecycleBin";
-        internal const string Version = "1.0";
+        public const string Version = "1.1";
+
+        private static ManualLogSource _logger;
 
         private void Start()
         {
+            _logger = Logger;
+
+            // Only use of ass-csharp, universal across games. Use Start instead of Awake bacuse of this
             _fullUserDataPath = Path.GetFullPath(UserData.Path);
-            HarmonyInstance.Create(GUID).PatchAll(typeof(RemoveToRecycleBin));
+
+            var h = HarmonyWrapper.PatchAll(typeof(RemoveToRecycleBin));
+
+            // Patch all FileStream to account for differences in internals of different framework versions
+            var hook = new HarmonyMethod(typeof(RemoveToRecycleBin), nameof(FileStreamHook));
+            if (hook == null) throw new ArgumentNullException(nameof(hook));
+            foreach (var m in AccessTools.GetDeclaredConstructors(typeof(FileStream)))
+            {
+                var args = m.GetParameters();
+                if (args.Any(x => x.ParameterType == typeof(FileMode)) && args.Any(x => x.ParameterType == typeof(FileAccess)))
+                {
+                    h.Patch(m, hook);
+                    //_logger.LogDebug("Patching " + m);
+                }
+            }
         }
 
         private static string _fullUserDataPath;
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(FileStream), null, new[] { typeof(string), typeof(FileMode), typeof(FileAccess) })]
         public static void FileStreamHook(string path, FileMode mode, FileAccess access)
         {
-            if (mode == FileMode.Create && access.HasFlag(FileAccess.Write))
+            if (mode == FileMode.Create && (access & FileAccess.Write) == FileAccess.Write)
                 MoveToRecycleBin(path);
         }
 
@@ -40,20 +59,20 @@ namespace KK_RemoveToRecycleBin
         {
             if (!File.Exists(path)) return;
 
-            var fullPath = Path.GetFullPath(path);
-            if (fullPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) &&
-                fullPath.StartsWith(_fullUserDataPath, StringComparison.OrdinalIgnoreCase))
+            try
             {
-                try
+                var fullPath = Path.GetFullPath(path);
+                if (fullPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) &&
+                    fullPath.StartsWith(_fullUserDataPath, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!RecycleBinUtil.MoveToRecycleBin(fullPath))
                         throw new Exception("Call returned false, check if recycle bin is enabled");
-                    Logger.Log(LogLevel.Info, $"Moved \"{fullPath}\" to recycle bin before it was removed or overwritten.");
+                    _logger.Log(LogLevel.Info, $"Moved \"{fullPath}\" to recycle bin before it was removed or overwritten.");
                 }
-                catch (Exception e)
-                {
-                    Logger.Log(LogLevel.Warning, $"Failed to move \"{fullPath}\" to recycle bin, it will be permanently deleted or overwritten.\n{e}");
-                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log(LogLevel.Warning, $"Failed to move \"{path}\" to recycle bin, it will be permanently deleted or overwritten.\n{e}");
             }
         }
     }

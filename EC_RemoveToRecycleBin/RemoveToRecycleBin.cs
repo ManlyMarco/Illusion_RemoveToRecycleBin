@@ -24,7 +24,6 @@ namespace KK_RemoveToRecycleBin
 
         private static string _fullUserDataPath;
 
-        //typeof(string), typeof(FileMode ), typeof( FileAccess ), typeof( FileShare ), typeof( int ), typeof( bool ), typeof( FileOptions 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(FileStream), MethodType.Constructor, typeof(string), typeof(FileMode), typeof(FileAccess), typeof(FileShare), typeof(int), typeof(bool), typeof(FileOptions))]
         public static void FileStreamHook(string path, FileMode mode, FileAccess access)
