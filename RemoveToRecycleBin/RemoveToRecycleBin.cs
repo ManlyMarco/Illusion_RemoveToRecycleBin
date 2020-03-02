@@ -5,7 +5,6 @@ using BepInEx;
 using BepInEx.Harmony;
 using BepInEx.Logging;
 using HarmonyLib;
-using Illusion.Extensions;
 
 namespace KK_RemoveToRecycleBin
 {
@@ -13,7 +12,7 @@ namespace KK_RemoveToRecycleBin
     public class RemoveToRecycleBin : BaseUnityPlugin
     {
         public const string GUID = "marco.RemoveToRecycleBin";
-        public const string Version = "1.1";
+        public const string Version = "1.1.1";
 
         private static ManualLogSource _logger;
 
@@ -21,8 +20,8 @@ namespace KK_RemoveToRecycleBin
         {
             _logger = Logger;
 
-            // Only use of ass-csharp, universal across games. Use Start instead of Awake bacuse of this
-            _fullUserDataPath = Path.GetFullPath(UserData.Path);
+            // UserData is universal across games. Run in Start to let the game create the dir. Don't use UserData.Path since it's broken in EC
+            _fullUserDataPath = Path.GetFullPath(Path.Combine(Paths.GameRootPath, "UserData"));
 
             var h = HarmonyWrapper.PatchAll(typeof(RemoveToRecycleBin));
 
