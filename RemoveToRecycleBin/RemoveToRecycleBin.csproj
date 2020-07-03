@@ -61,6 +61,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)AI_$(TargetFileName)"
+copy "$(TargetPath)" "$(TargetDir)HS2_$(TargetFileName)"
 copy "$(TargetPath)" "$(TargetDir)KK_$(TargetFileName)"
 copy "$(TargetPath)" "$(TargetDir)EC_$(TargetFileName)"
 del "$(TargetPath)"</PostBuildEvent>
