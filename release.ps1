@@ -1,3 +1,8 @@
+# Config ------------------
+$plugName = "RemoveToRecycleBin"
+$gamePrefixes = @("KK_", "AI_", "EC_", "HS2_", "KKS_")
+
+# Env setup ---------------
 if ($PSScriptRoot -match '.+?\\bin\\?') {
     $dir = $PSScriptRoot + "\"
 }
@@ -5,26 +10,38 @@ else {
     $dir = $PSScriptRoot + "\bin\"
 }
 
-$array = @("KK", "AI", "EC")
-
-
 $copy = $dir + "\copy\BepInEx" 
-
-$ver = "v" + (Get-ChildItem -Path ($dir + "\BepInEx\") -Filter "*.dll" -Recurse -Force)[0].VersionInfo.FileVersion.ToString()
-
 
 New-Item -ItemType Directory -Force -Path ($dir + "\out")  
 
-foreach ($element in $array) {
+# Create releases ---------
+function CreateZip ($element)
+{
+    Remove-Item -Force -Path ($dir + "\copy") -Recurse -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force -Path ($copy + "\plugins")
 
-Remove-Item -Force -Path ($dir + "\copy") -Recurse -ErrorAction SilentlyContinue
-New-Item -ItemType Directory -Force -Path ($copy + "\plugins")
+    Copy-Item -Path ($dir + "\BepInEx\plugins\" + $element + "*.*") -Destination ($copy + "\plugins\" ) -Recurse -Force 
 
-Copy-Item -Path ($dir + "\BepInEx\plugins\" + $element + "*.*") -Destination ($copy + "\plugins\" ) -Recurse -Force 
+    $copiedFiles = Get-ChildItem -Path ($copy) -Filter "*.dll" -Recurse -Force;
+    if($copiedFiles)
+    {
+        $ver = "v" + $copiedFiles[0].VersionInfo.FileVersion.ToString()
 
+        Compress-Archive -Path $copy -Force -CompressionLevel "Optimal" -DestinationPath ($dir + "out\" + $element  + $plugName + "_" + $ver + ".zip")
+    }
+}
 
-Compress-Archive -Path $copy -Force -CompressionLevel "Optimal" -DestinationPath ($dir + "out\" + $element + "_RemoveToRecycleBin_" + $ver + ".zip")
-
+foreach ($gamePrefix in $gamePrefixes) 
+{
+    try
+    {
+        CreateZip ($gamePrefix)
+    }
+    catch 
+    {
+        # retry
+        CreateZip ($gamePrefix)
+    }
 }
 
 Remove-Item -Force -Path ($dir + "\copy") -Recurse
