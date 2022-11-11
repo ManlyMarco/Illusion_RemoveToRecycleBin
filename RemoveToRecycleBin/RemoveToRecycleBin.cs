@@ -12,7 +12,7 @@ namespace KK_RemoveToRecycleBin
     public class RemoveToRecycleBin : BaseUnityPlugin
     {
         public const string GUID = "marco.RemoveToRecycleBin";
-        public const string Version = "1.1.1";
+        public const string Version = "1.2";
 
         private static ManualLogSource _logger;
 
@@ -21,7 +21,7 @@ namespace KK_RemoveToRecycleBin
             _logger = Logger;
 
             // UserData is universal across games. Run in Start to let the game create the dir. Don't use UserData.Path since it's broken in EC
-            _fullUserDataPath = Path.GetFullPath(Path.Combine(Paths.GameRootPath, "UserData"));
+            _fullUserDataPath = Path.GetFullPath(Path.Combine(Paths.GameRootPath, "UserData\\")).ToLower();
 
             var h = HarmonyWrapper.PatchAll(typeof(RemoveToRecycleBin));
 
@@ -56,17 +56,24 @@ namespace KK_RemoveToRecycleBin
 
         private static void MoveToRecycleBin(string path)
         {
-            if (!File.Exists(path)) return;
-
             try
             {
-                var fullPath = Path.GetFullPath(path);
-                if (fullPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) &&
-                    fullPath.StartsWith(_fullUserDataPath, StringComparison.OrdinalIgnoreCase))
+                if (!File.Exists(path)) return;
+
+                var fullPath = Path.GetFullPath(path).ToLower();
+                if (fullPath.EndsWith(".png", StringComparison.Ordinal) &&
+                    fullPath.StartsWith(_fullUserDataPath, StringComparison.Ordinal))
                 {
-                    if (!RecycleBinUtil.MoveToRecycleBin(fullPath))
-                        throw new Exception("Call returned false, check if recycle bin is enabled");
-                    _logger.Log(LogLevel.Info, $"Moved \"{fullPath}\" to recycle bin before it was removed or overwritten.");
+                    var relativePath = fullPath.Substring(_fullUserDataPath.Length);
+
+                    // chara, coordinate and studio/scene are in all games; map, pose and edit are in EC
+                    if (relativePath.StartsWith("chara\\") || relativePath.StartsWith("coordinate\\") || relativePath.StartsWith("studio\\scene\\") || 
+                        relativePath.StartsWith("map\\") || relativePath.StartsWith("pose\\") || relativePath.StartsWith("edit\\"))
+                    {
+                        if (!RecycleBinUtil.MoveToRecycleBin(fullPath))
+                            throw new Exception("Call returned false, check if recycle bin is enabled");
+                        _logger.Log(LogLevel.Info, $"Moved \"{fullPath}\" to recycle bin before it was removed or overwritten.");
+                    }
                 }
             }
             catch (Exception e)
