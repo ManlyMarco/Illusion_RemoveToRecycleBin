@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("RemoveToRecycleBin")]
 [assembly: AssemblyDescription("Move removed/overwritten cards to recycle bin")]
-[assembly: AssemblyCompany("ManlyMarco")]
+[assembly: AssemblyCompany("https://github.com/ManlyMarco/Illusion_RemoveToRecycleBin")]
 [assembly: AssemblyProduct("RemoveToRecycleBin")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 
