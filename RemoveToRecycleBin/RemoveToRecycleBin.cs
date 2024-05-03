@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using BepInEx;
-using BepInEx.Harmony;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -23,7 +22,7 @@ namespace KK_RemoveToRecycleBin
             // UserData is universal across games. Run in Start to let the game create the dir. Don't use UserData.Path since it's broken in EC
             _fullUserDataPath = Path.GetFullPath(Path.Combine(Paths.GameRootPath, "UserData\\")).ToLower();
 
-            var h = HarmonyWrapper.PatchAll(typeof(RemoveToRecycleBin));
+            var h = Harmony.CreateAndPatchAll(typeof(RemoveToRecycleBin), GUID);
 
             // Patch all FileStream to account for differences in internals of different framework versions
             var hook = new HarmonyMethod(typeof(RemoveToRecycleBin), nameof(FileStreamHook));
