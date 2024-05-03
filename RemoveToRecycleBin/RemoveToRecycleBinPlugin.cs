@@ -11,7 +11,7 @@ namespace RemoveToRecycleBin
     public class RemoveToRecycleBinPlugin : BaseUnityPlugin
     {
         public const string GUID = "marco.RemoveToRecycleBin";
-        public const string Version = "1.2";
+        public const string Version = "2.0";
 
         private static ManualLogSource _logger;
 
