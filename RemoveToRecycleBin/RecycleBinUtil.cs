@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace KK_RemoveToRecycleBin
+namespace RemoveToRecycleBin
 {
     /// <summary>
     /// Allows to move files to recycle bin instead of completely removing them.
