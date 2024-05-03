@@ -5,10 +5,10 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
-namespace KK_RemoveToRecycleBin
+namespace RemoveToRecycleBin
 {
     [BepInPlugin(GUID, "Remove Cards To Recycle Bin", Version)]
-    public class RemoveToRecycleBin : BaseUnityPlugin
+    public class RemoveToRecycleBinPlugin : BaseUnityPlugin
     {
         public const string GUID = "marco.RemoveToRecycleBin";
         public const string Version = "1.2";
@@ -22,10 +22,10 @@ namespace KK_RemoveToRecycleBin
             // UserData is universal across games. Run in Start to let the game create the dir. Don't use UserData.Path since it's broken in EC
             _fullUserDataPath = Path.GetFullPath(Path.Combine(Paths.GameRootPath, "UserData\\")).ToLower();
 
-            var h = Harmony.CreateAndPatchAll(typeof(RemoveToRecycleBin), GUID);
+            var h = Harmony.CreateAndPatchAll(typeof(RemoveToRecycleBinPlugin), GUID);
 
             // Patch all FileStream to account for differences in internals of different framework versions
-            var hook = new HarmonyMethod(typeof(RemoveToRecycleBin), nameof(FileStreamHook));
+            var hook = new HarmonyMethod(typeof(RemoveToRecycleBinPlugin), nameof(FileStreamHook));
             if (hook == null) throw new ArgumentNullException(nameof(hook));
             foreach (var m in AccessTools.GetDeclaredConstructors(typeof(FileStream)))
             {
